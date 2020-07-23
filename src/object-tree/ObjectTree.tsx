@@ -1,10 +1,15 @@
 import _ from "lodash";
-import React from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import * as mst from "@spcy/lib.core.mst-model";
 import * as cr from "@spcy/lib.core.reflection";
 import * as mc from "@spcy/lib.model.core";
-import { Inspector } from "@spcy/pub.react-inspector";
+import {
+  Inspector,
+  ObjectRootLabel,
+  ObjectLabel,
+} from "@spcy/pub.react-inspector";
 import { observer } from "mobx-react";
+import { useOnClickOutside } from "../hooks";
 
 interface Node {
   name: string;
@@ -54,15 +59,15 @@ const objectIterator = function* (data: any, typeInfo: cr.ObjectType) {
   yield* _.map(typeInfo.properties, (propertyType, name) => {
     const value = data[name];
     const type = getTypeName(propertyType, value);
-    return { name, type, data: value };
+    return { name, type, data: value, context: data };
   });
 };
 
 const arrayIterator = function* (data: any, typeInfo: cr.ArrayType) {
   const type = getTypeName(typeInfo.items);
 
-  yield* _.map(data, (data, name) => {
-    return { name, type, data };
+  yield* _.map(data, (item, name) => {
+    return { name, type, data: item, context: data };
   });
 };
 
@@ -71,9 +76,6 @@ const createIterator = () => {
     if (!data) return;
 
     if (!mst.isObject(data)) return;
-
-    const activable = mc.queryInterface(data, mc.Types.Activable);
-    if (activable) activable.activate();
 
     const typeInfo = mst.getObjectSchema(data);
 
@@ -94,12 +96,89 @@ const createIterator = () => {
   return iterator;
 };
 
+const ValueEditor: React.FC<{
+  data: any;
+  name: string;
+  context: any;
+  toggle: React.Dispatch<React.SetStateAction<boolean>>;
+}> = (props) => {
+  const { data, toggle, context, name } = props;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef && inputRef.current && inputRef.current.focus();
+  });
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!context) return;
+    context.patch((self) => {
+      self[name] = event.target.value;
+    });
+  };
+
+  useOnClickOutside(inputRef, () => toggle(false));
+  return <input ref={inputRef} value={data} onChange={onChange} />;
+};
+
+const ValueDecorator: React.FC<{ data: any; name: string; context: any }> = (
+  props
+) => {
+  const { data, name, context } = props;
+  const [editMode, toggle] = useState(false);
+  return (
+    <span onClick={() => toggle(true)}>
+      {editMode ? (
+        <ValueEditor
+          name={name}
+          data={data}
+          toggle={toggle}
+          context={context}
+        />
+      ) : (
+        props.children
+      )}
+    </span>
+  );
+};
+
+const NodeDecorator: React.FC<{ data: any; name: string }> = (props) => {
+  const { data, name } = props;
+  useEffect(() => {
+    const activable =
+      data && mst.isObject(data) && mc.queryInterface(data, mc.Types.Activable);
+    if (activable) activable.activate();
+
+    return () => {
+      if (activable) activable.deactivate();
+    };
+  });
+  return <>!{props.children}</>;
+};
+
+const nodeRenderer: React.FC<{
+  depth: number;
+  name: string;
+  data: any;
+  type: any;
+  isNonenumerable: boolean;
+}> = (props) =>
+  props.depth === 0 ? (
+    <NodeDecorator {...props}>
+      <ObjectRootLabel {...props} />
+    </NodeDecorator>
+  ) : (
+    <NodeDecorator {...props}>
+      <ObjectLabel valueDecorator={ValueDecorator} {...props} />
+    </NodeDecorator>
+  );
+
 export const ObjectTree: React.FC<{ object: unknown }> = observer((props) => {
   const { object } = props;
   return (
     <Inspector
       expandLevel={1}
       data={object}
+      nodeRenderer={nodeRenderer}
       objectIterator={createIterator()}
     />
   );
