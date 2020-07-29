@@ -152,7 +152,7 @@ const NodeDecorator: React.FC<{ data: any; name: string }> = (props) => {
       if (activable) activable.deactivate();
     };
   });
-  return <>!{props.children}</>;
+  return <>{props.children}</>;
 };
 
 const nodeRenderer: React.FC<{
