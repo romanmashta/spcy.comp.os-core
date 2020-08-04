@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as r from "@spcy/lib.core.reflection";
 import * as m from "./person.model";
 
@@ -7,35 +8,35 @@ const PersonType: r.TypeInfo = {
   type: "object",
   properties: {
     firstName: {
-      type: "string",
+      type: "string"
     },
     lastName: {
-      type: "string",
+      type: "string"
     },
     email: {
-      type: "string",
+      type: "string"
     },
     roles: {
       type: "array",
       items: {
-        type: "string",
-      },
-    },
-  },
+        type: "string"
+      }
+    }
+  }
 };
 
 const Person: r.Prototype<m.Person> = {
-  ref: { $ref: PersonType.$id, $refPackage: PersonType.$package },
-  typeInfo: PersonType,
+  ref: { $ref: PersonType.$id!, $refPackage: PersonType.$package! },
+  typeInfo: PersonType
 };
 
 export const PersonModule: r.Module = {
   $id: "comp.os-core",
   $defs: {
-    Person: PersonType,
-  },
+    Person: PersonType
+  }
 };
 
 export const Types = {
-  Person,
+  Person
 };
