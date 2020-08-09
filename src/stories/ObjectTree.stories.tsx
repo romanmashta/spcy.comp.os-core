@@ -7,11 +7,9 @@ import { ObjectTree } from "../object-tree";
 import * as Reflection from "@spcy/lib.core.reflection";
 import * as Core from "@spcy/lib.model.core";
 import { createInstance } from "@spcy/lib.core.mst-model";
-import { Types as StoryTypes } from "./index.schema";
 
 Reflection.SchemaRepository.registerTypes(Reflection.Types);
 Reflection.SchemaRepository.registerTypes(Core.Types);
-Reflection.SchemaRepository.registerTypes(StoryTypes);
 
 const app = createInstance(Core.Types.FirebaseApp, {
   name: "Sandbox",
@@ -26,22 +24,6 @@ const app = createInstance(Core.Types.FirebaseApp, {
   },
 });
 
-const person = createInstance(StoryTypes.Person, {
-  firstName: "john",
-  lastName: "doe",
-  roles: ["one", "two"],
-});
-
 storiesOf("Object Tree", module)
-  .add("Simple Person", () => {
-    button("Hello", () => {});
-    return <ObjectTree object={person} />;
-  })
   .add("Sample App", () => <ObjectTree object={app} />)
   .addDecorator(withKnobs);
-
-setTimeout(() => {
-  person.patch((self) => {
-    person.lastName = "xxxxx";
-  });
-}, 3000);
