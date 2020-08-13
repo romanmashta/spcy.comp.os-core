@@ -1,3 +1,4 @@
+import "typeface-roboto";
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { createInstance } from "@spcy/lib.core.mst-model";
@@ -6,16 +7,37 @@ import { SchemaRepository } from "@spcy/lib.core.reflection";
 import { Render } from "./render";
 import "./views";
 import { Container } from "@material-ui/core";
+import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
 
 SchemaRepository.registerTypes(Layout.Types);
 
 const typo = createInstance(Layout.Types.Container, {
   elements: [
-    { h1: "H1 title" },
-    { h2: "H2 title" },
-    { h3: "H3 title" },
-    { text: "Hello1" },
-    { text: "Hello2" },
+    { hh1: "hh1. Heading" },
+    { hh2: "hh2. Heading" },
+    { hh3: "hh3. Heading" },
+    { h1: "h1. Heading" },
+    { h2: "h2. Heading" },
+    { h3: "h3. Heading" },
+    {
+      subtitle:
+        "subtitle. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
+    },
+    {
+      altSubtitle:
+        "altSubtitle. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
+    },
+    {
+      text:
+        "text. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.",
+    },
+    {
+      altText:
+        "altText. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.",
+    },
+    { buttonText: "button text" },
+    { caption: "caption text" },
+    { overline: "overline text" },
   ],
 });
 
@@ -32,18 +54,20 @@ const advanced = createInstance(Layout.Types.Row, {
     { text: "image" },
     {
       elements: [
-        { text: " Standard license" },
-        { text: "Full resolution 1920x1080 • JPEG" },
-        { text: "ID: 1030114" },
-        { text: "remove" },
+        { subtitle: "Standard license" },
+        { altText: "Full resolution 1920x1080 • JPEG" },
+        { altText: "ID: 1030114" },
+        { buttonText: "Remove" },
       ],
     },
-    { text: "$19.00" },
+    { subtitle: "$19.00" },
   ],
 });
 
 const container = (storyFn: any) => (
-  <Container maxWidth={"md"}>{storyFn()}</Container>
+  <ScopedCssBaseline>
+    <Container maxWidth={"md"}>{storyFn()}</Container>
+  </ScopedCssBaseline>
 );
 
 storiesOf("Layout", module)
