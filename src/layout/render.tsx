@@ -1,5 +1,5 @@
 import React from "react";
-import * as Core from "@spcy/lib.model.core";
+import * as Core from "@spcy/lib.standard.core";
 
 export const NoComponent: Core.View<unknown> = (props) => {
   const { model } = props;

@@ -5,7 +5,7 @@ import { button, withKnobs } from "@storybook/addon-knobs";
 import { ObjectTree } from "../object-tree";
 
 import * as Reflection from "@spcy/lib.core.reflection";
-import * as Core from "@spcy/lib.model.core";
+import * as Core from "@spcy/lib.standard.core";
 import { createInstance } from "@spcy/lib.core.mst-model";
 
 Reflection.SchemaRepository.registerTypes(Reflection.Types);

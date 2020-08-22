@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { Grid } from "@material-ui/core";
-import * as Core from "@spcy/lib.model.core";
+import * as Core from "@spcy/lib.standard.core";
 import * as Layout from "@spcy/lib.standard.layout";
 import { Render } from "./render";
 

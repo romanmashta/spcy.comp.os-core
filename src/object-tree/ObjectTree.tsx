@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import * as mst from "@spcy/lib.core.mst-model";
 import * as cr from "@spcy/lib.core.reflection";
-import * as mc from "@spcy/lib.model.core";
+import * as mc from "@spcy/lib.standard.core";
 import {
   Inspector,
   ObjectRootLabel,
