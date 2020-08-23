@@ -3,7 +3,7 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import * as Core from "@spcy/lib.standard.core";
 import * as Layout from "@spcy/lib.standard.layout";
-import { Render } from "./render";
+import { Render } from "../core/render";
 
 const RenderItem: Core.View<unknown> = (props) => {
   const { model } = props;

@@ -4,7 +4,7 @@ import { storiesOf } from "@storybook/react";
 import { createInstance } from "@spcy/lib.core.mst-model";
 import * as Layout from "@spcy/lib.standard.layout";
 import { SchemaRepository } from "@spcy/lib.core.reflection";
-import { Render } from "./render";
+import { Render } from "../core";
 import "./views";
 import { Container } from "@material-ui/core";
 import ScopedCssBaseline from "@material-ui/core/ScopedCssBaseline";
